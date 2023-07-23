@@ -40,7 +40,7 @@ for name, param in state_dict.items():
 ```
 
 <div align='center'>
-<img src='/assets/images/fp32_fp16_diff/fp32_fp16.png' width='700'>
+<img src='/assets/fp32_fp16_diff/fp32_fp16.png' width='700'>
 </div>
 
 而输入一般会做 normalization，所以也不会超过 FP16 的 dynamic range，唯一有可能出问题就是中间的 activation 的计算，可能存在溢出的问题。
@@ -52,7 +52,7 @@ for name, param in state_dict.items():
 在 [MIXED PRECISION TRAINING](https://arxiv.org/pdf/1710.03740.pdf) 这篇论文中，作者提出了混合精度训练的原理，我们也可以用一张图来简单表示整体的训练流程。
 
 <div align='center'>
-<img src='/assets/images/fp32_fp16_diff/amp_training.png' alt="ref: https://www.mindspore.cn/tutorials/zh-CN/r2.0.0-alpha/advanced/mixed_precision.htm" width='700'>
+<img src='/assets/fp32_fp16_diff/amp_training.png' alt="ref: https://www.mindspore.cn/tutorials/zh-CN/r2.0.0-alpha/advanced/mixed_precision.htm" width='700'>
 </div>
 
 其中要特别注意以下 3 点，weight backup，loss scaling 以及 FP16 white list。
