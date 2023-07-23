@@ -1,6 +1,6 @@
 ---
 title: Self-Supervised Learning 入门介绍
-pubDatetime: 2020-02-20T05:17:19
+pubDatetime: 2020-02-20
 description: "SSL 的入门介绍和几篇 paper 的个人解读"
 tags:
   - summary
