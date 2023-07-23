@@ -19,7 +19,13 @@ export default defineConfig({
     sitemap(),
   ],
   markdown: {
+    rehypePlugins: [
+      ['rehype-katex', {
+        // Katex plugin options
+      }]
+    ],
     remarkPlugins: [
+      'remark-math',
       remarkToc,
       [
         remarkCollapse,
