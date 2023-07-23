@@ -4,7 +4,7 @@ export const SITE: Site = {
   website: "https://astro-paper.pages.dev/",
   author: "Sherlock Liao",
   desc: "A minimal, responsive and SEO-friendly Astro blog theme.",
-  title: "DistillPaper",
+  title: "Distill",
   ogImage: "astropaper-og.jpg",
   lightAndDarkMode: true,
   postPerPage: 3,
