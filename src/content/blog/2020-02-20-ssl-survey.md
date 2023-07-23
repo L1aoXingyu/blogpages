@@ -5,7 +5,7 @@ description: "SSL 的入门介绍和几篇 paper 的个人解读"
 tags:
   - summary
   - self-supervised learning
-ogImage: /public/images/ssl-survey/ssl_yann.jpg
+ogImage: /assets/images/ssl-survey/ssl_yann.jpg
 ---
 
 ## 引子
@@ -14,7 +14,7 @@ ogImage: /public/images/ssl-survey/ssl_yann.jpg
 所以觉得有必要了解一下 SSL，也看了一些 paper 和 blog，最后决定写这篇文章作为一个总结。
 
 <div align='center'>
-<img src='/public/assets/ssl-survey/ssl_yann.jpg'>
+<img src='/assets/ssl-survey/ssl_yann.jpg'>
 <figcaption>Yann in AAAI</figcaption>
 </div>
 
@@ -35,7 +35,7 @@ ogImage: /public/images/ssl-survey/ssl_yann.jpg
 对编码器的基本要求就是尽可能保留原始数据的重要信息，所以如果能通过 decoder 解码回原始图片，则说明 latent code 重建的足够好了。
 
 <div align='center'>
-<img src='/public/assets/ssl-survey/ssl_autoencoder.png' width='500'>
+<img src='/assets/ssl-survey/ssl_autoencoder.png' width='500'>
 <figcaption>source: https://towardsdatascience.com/generating-images-with-autoencoders-77fd3a8dd368"</figcaption>
 </div>
 
@@ -52,7 +52,7 @@ ogImage: /public/images/ssl-survey/ssl_yann.jpg
 通过这个例子可以明显看出，要提取一个好的特征表达的充分条件是能够重建，但是并不是必要条件，所以有了下面这一类方法。
 
 <div align="center">
-<img src="/public/assets/ssl-survey/ssl_dollar.jpg" width="500">
+<img src="/assets/ssl-survey/ssl_dollar.jpg" width="500">
 <figcaption>dollar examples</figcaption>
 </div>
 
@@ -69,7 +69,7 @@ ogImage: /public/images/ssl-survey/ssl_yann.jpg
 下面是这两类方法的总结图片。
 
 <div align="center">
-<img src="/public/assets/ssl-survey/ssl_methods.png" width="500">
+<img src="/assets/ssl-survey/ssl_methods.png" width="500">
 <figcaption>source: https://ankeshanand.com/blog/2020/01/26/contrative-self-supervised-learning.html</figcaption>
 </div>
 
@@ -150,12 +150,12 @@ $$
 对于图像任务，可以使用 pixelCNN 的方式将其转化成一个序列类型，用前几个 patch 作为输入，预测下一个 patch。
 
 <div align='center'>
-<img src='/public/assets/ssl-survey/ssl_cpc.png' width='500'>
+<img src='/assets/ssl-survey/ssl_cpc.png' width='500'>
 <figcaption>source: https://ankeshanand.com/blog/2020/01/26/contrative-self-supervised-learning.html</figcaption>
 </div>
 
 <div align='center'>
-<img src='/public/assets/ssl-survey/ssl_cpc_img.png' width='500'>
+<img src='/assets/ssl-survey/ssl_cpc_img.png' width='500'>
 <figcaption>source: https://arxiv.org/abs/1807.03748</figcaption>
 </div>
 
@@ -164,7 +164,7 @@ $$
 通过上面的分析和推导，我们有了这样一个通用的框架，那么 deep infomax 这篇文章就非常好理解了，其中正样本就是第 i 张图片的 global feature 和中间 feature map 上个的 local feature，而负样本就是另外一张图片作为输入，非常好理解。
 
 <div align='center'>
-<img src='/public/assets/ssl-survey/ssl_deepinfomax.png' width='500'>
+<img src='/assets/ssl-survey/ssl_deepinfomax.png' width='500'>
 <figcaption>source: https://arxiv.org/abs/1808.06670</figcaption>
 </div>
 
@@ -174,7 +174,7 @@ $$
 CMC 这篇 paper 就是从这一点出发去选择正样本，而且通过这个方式，每个 anchor 不仅仅只有一个正样本，可以通过多模态得到多个正样本，如下图右边所示。
 
 <div align='center'>
-<img src='/public/assets/ssl-survey/ssl_cmc.png' width='500'>
+<img src='/assets/ssl-survey/ssl_cmc.png' width='500'>
 <figcaption>source: http://arxiv.org/abs/1906.05849</figcaption>
 </div>
 
@@ -186,7 +186,7 @@ CMC 这篇 paper 就是从这一点出发去选择正样本，而且通过这个
 而负样本则从 memory bank 里面拿，同时 memory bank 的 feature 也是通过 model ema 得到，并且通过队列的形式丢掉老的 feature。
 
 <div align='center'>
-<img src='/public/assets/ssl-survey/ssl_moco.jpg' width='500'>
+<img src='/assets/ssl-survey/ssl_moco.jpg' width='500'>
 <figcaption>source: https://arxiv.org/abs/1911.05722</figcaption>
 </div>
 
@@ -202,7 +202,7 @@ MoCo 通过工程的方式，和一些 trick，比如 model ema 和 shuffleBN �
 ## Results
 
 <div align='center'>
-<img src='/public/assets/ssl-survey/ssl_ret.jpg' width='500'>
+<img src='/assets/ssl-survey/ssl_ret.jpg' width='500'>
 <figcaption>source: https://arxiv.org/abs/2002.05709</figcaption>
 </div>
 
