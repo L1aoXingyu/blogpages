@@ -7,6 +7,7 @@ tags:
   - LLM
   - CoT
   - Evolution
+draft: true
 ---
 
 LLM 一般分为两个阶段的训练，第一个阶段是 unsupervised pre-train, 不仅需要大量的 data，也需要很多计算资源；第二个阶段是 alignment，不仅包括 instruction tuning，还有 RLHF，这个阶段需要的计算资源和数量远小于 pre-train，所以可以看到几乎全世界所有的机构都在 alignment 阶段进行分布式想 idea。
