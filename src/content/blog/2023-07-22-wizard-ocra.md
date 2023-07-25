@@ -24,7 +24,10 @@ draft: true
 因为学界没有那么多商业上的限制，所以可以通过 gpt3.5/gpt4 来生成 instruction data，这样就不用依赖复杂的人工标注也可以获得大量的 instruction data，
 代表性的工作如 self-instruct[^3], [stanford_alpaca](https://github.com/tatsu-lab/stanford_alpaca) 等等。
 
-不过这些工作都存在一些共同的问题，生成的 instruction data 不仅在多样性上有欠缺，同时在复杂度上也不够，这导致 instruction 和人类标注相比存在差距，在 LLM alignment 阶段获得效果也就非常一般了。
+不过这些工作都存在共同的问题，就是生成的 instruction data 在多样性上存在欠缺。
+这里的多样性不只是说 domain 上的多样性，也包含复杂度上的多样性，即简单指令到复杂指令需要均匀分布，如果全部是简单指令，模型无法学会复杂任务；
+如果全部是复杂指令，对于模型来说不存在循序渐进的学习过程，会导致模型学不会 CoT 的能力。
+所以在**复杂度上的 diversity** 非常重要，之前 instruction 生成的方法都没有充分考虑这个问题，这导致 instruction 和人类标注相比存在差距，在 LLM alignment 阶段获得效果也就非常一般了。
 
 ## WizardCoder
 
