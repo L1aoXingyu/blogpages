@@ -29,9 +29,21 @@ draft: true
 如果全部是复杂指令，对于模型来说不存在循序渐进的学习过程，会导致模型学不会 CoT 的能力。
 所以在**复杂度上的 diversity** 非常重要，之前 instruction 生成的方法都没有充分考虑这个问题，这导致 instruction 和人类标注相比存在差距，在 LLM alignment 阶段获得效果也就非常一般了。
 
+WizardLM 主要是提出了一种叫 _Evol-Instruct_ 的方法来生成 instruction data，这种方法甚至超过了 ShareGPT[^4]，要知道 ShareGPT 的数据都是用户在使用过程中所创造的，在经过筛选之后，已经算是质量非常高的数据了。
+
+那么 _Evol-Instruct_ 到底是怎么做的呢？主要的步骤有 3 个:
+
+1. instruction evolving;
+2. response generation;
+3. elimination evolving;
+
+下面我们来具体讲一下这三个步骤。
+
+### Instruction Evolving
+
 ## WizardCoder
 
-WizardCoder[^4]
+WizardCoder
 
 ## Ocra
 
@@ -40,7 +52,9 @@ WizardCoder[^4]
 [^1]: [LLaMA: Open and Efficient Foundation Language Models](https://arxiv.org/abs/2302.13971)
 [^2]: [WizardLM: Empowering Large Language Models to Follow Complex Instructions](https://arxiv.org/abs/2304.12244)
 [^3]: [Self-Instruct: Aligning Language Models with Self-Generated Instructions](https://arxiv.org/abs/2212.10560)
-[^4]: [WizardCoder: Empowering Code Large Language Models with Evol-Instruct](https://arxiv.org/abs/2306.08568)
+[^4]: https://sharegpt.com/
+
+<!-- [^4]: [WizardCoder: Empowering Code Large Language Models with Evol-Instruct](https://arxiv.org/abs/2306.08568) -->
 
 wizardLM and orca
 
