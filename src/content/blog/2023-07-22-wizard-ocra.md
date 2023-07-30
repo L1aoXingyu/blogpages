@@ -219,7 +219,7 @@ Usage: Sample response that meets the criteria from the key part. Explain why yo
 5. WizardLM 在 MMLU 上可以获得一些精度提升，不过提升的幅度并不大，因为 MMLU 里面主要还是测试 world knowledge 为主，而在 Ocra 的 BBH 结果中可以看到，相比 Vicuna-13B，reasoning 的提升是巨大的；
 6. 对于 code generation task，在 code corpus 上做 pretrain 实际上只是把代码的能力注入到了模型中，但是写代码实际上还需要分解和理解问题的能力，这个能力单纯通过 pretrain 非常难以获取，也许可以通过高质量的 comments 学到，但是这对于海量的 pretrain data 来说比例太少了，而通过 instruction tuning 可以帮助模型解锁这个能力，这也是为什么 HumanEval 上指标提升如此多的原因；
 
-以上就是通过阅读这几篇论文，以及自己做了一些实验之后对 instruction tuning 的一些思考，希望对大家有所帮助，如果有什么问题，欢迎大家和我讨论。
+以上就是通过阅读这几篇论文，以及自己做了一些实验之后对 instruction tuning 的一些思考，希望对大家有所帮助，如果有什么问题，欢迎大家在评论区和我讨论。
 
 ## Reference
 
