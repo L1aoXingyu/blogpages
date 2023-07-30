@@ -110,7 +110,7 @@ You can increase the difficulty using, but not limited to, the following methods
 
 WizardLM(Coder) 主要关注如何生成多样性和复杂的 instruction，但是对于 response 应该如何生成，并没有深入研究，Ocra[^6] 就是这个对这个问题的补充。
 
-目前大部分的方法都是通过调用 GPT3.5/4 的 API 来生成 instruction 的回答，这种方式都是通过模仿 large foundation models(LFMs) 来提升小模型的效果，但是这种方式会使得模型只能从 LFM 的输出中学习到浅层的信号，最终的结果就是**小模型只学会了模仿 LFM 的风格，并没有真正学会 LFM 的推理过程**。
+目前大部分的方法都是通过调用 GPT-3.5/GPT-4 的 API 来生成 instruction 的回答，这种方式都是通过模仿 large foundation models(LFMs) 来提升小模型的效果，但是这种方式会使得模型只能从 LFM 的输出中学习到浅层的信号，最终的结果就是**小模型只学会了模仿 LFM 的风格，并没有真正学会 LFM 的推理过程**。
 
 Ocra 这篇文章提出了一个简单的方法叫做 Explanation tuning，对于数据集中 `<query, response>` 进行扩展，使用 GPT-4 作为 teacher 来解释 response 生成中的 reasoning 过程。
 
@@ -160,6 +160,66 @@ Usage: Sample response that meets the criteria from the key part. Explain why yo
 
 ## Instruction Tuning 的思考
 
+配合上 WizardLM(WizardCoder) 以及 Ocra，可以构建一个非常好的 instruction tuning 数据集，但是我们需要先想想到底 Instruction Tuning 可以给我们带来什么？
+
+我们可以看一下 MMLU[^7] 的结果，MMLU 简单来说是一个包含 57 个学科的单选题，主要测试模型的 world knowledge 以及对问题的理解能力。
+
+在 LLaMa 的论文中，MMLU 的 5-shot 结果如下：
+
+<img src="/assets/wizardlm/llama-i-mmlu.png" width=400>
+
+可以看到 LLaMa-65B 在经过 Instruction tuning 之后，提升了 5.5。
+
+另外还可以看看 WizardLM 的结果，测试了 7B，13B 和 33B 模型的效果:
+
+| Model            | MMLU 5-shot | ARC 25-shot | TruthfulQA 0-shot | HellaSwag 10-shot | Average |
+| ---------------- | ----------- | ----------- | ----------------- | ----------------- | ------- |
+| Text-davinci-003 | 56.9        | 85.2        | 59.3              | 82.2              | 70.9    |
+| Vicuna-13b 1.1   | 51.3        | 53.0        | 51.8              | 80.1              | 59.1    |
+| Guanaco 30B      | 57.6        | 63.7        | 50.7              | 85.1              | 64.3    |
+| WizardLM-7B 1.0  | 42.7        | 51.6        | 44.7              | 77.7              | 54.2    |
+| WizardLM-13B 1.0 | 52.3        | 57.2        | 50.5              | 81.0              | 60.2    |
+| WizardLM-33B 1.0 | 58.8        | 62.5        | 52.4              | 83.3              | 64.2    |
+
+对比于原始 LLaMa 论文的结果如下：
+
+<img src="/assets/wizardlm/llama-mmlu.png" width=500>
+
+可以看到不同 size 的模型，经过 instruction tuning 之后，在 MMLU 上都有比较明显的提升。
+
+除了 NLP foundamental tasks 之外，还可以看看 code generation 相关的 Benchmark HumanEval[^8] 上的结果:
+
+| Model               | HumanEval Pass@1 | MBPP Pass@1 |
+| ------------------- | ---------------- | ----------- |
+| CodeGen-16B-Multi   | 18.3             | 20.9        |
+| CodeGeeX            | 22.9             | 24.4        |
+| LLaMA-33B           | 21.7             | 30.2        |
+| LLaMA-65B           | 23.7             | 37.7        |
+| PaLM-540B           | 26.2             | 36.8        |
+| PaLM-Coder-540B     | 36.0             | 47.0        |
+| PaLM 2-S            | 37.6             | 50.0        |
+| CodeGen-16B-Mono    | 29.3             | 35.3        |
+| Code-Cushman-001    | 33.5             | 45.9        |
+| StarCoder-15B       | 33.6             | 43.6\*      |
+| InstructCodeT5+     | 35.0             | --          |
+| WizardLM-30B 1.0    | 37.8             | --          |
+| WizardCoder-15B 1.0 | 57.3             | 51.8        |
+
+可以看到，在 code generation 任务上，不管是基于 LLaMa-33B 还是用 StarCoder-15B，都取得了非常大的提升，LLaMa 上提升了 16.1，StarCoder 上提升了 23.7。
+
+通过对上面的结果进行分析，可以发现 instruction tuning 不仅仅是让模型在 style(format) 和人类对齐，否则并不会在各项指标上都带了巨大的提升，特别是针对 MMLU 这种选择题的任务，style(format) 对结果的影响微乎其微。
+
+下面是我对 SFT(instruction tuning) 的一些思考(不保证是对的):
+
+1. Pre-Train 阶段为模型注入知识，SFT 阶段很难再为模型注入新的知识，一方面 SFT 的数据规模相比 Pre-Train 太小了，另外一方面 SFT 主要的 learning 过程都是通过 `<insturct, response>` 的方式进行监督，更多地在学习 instruction following 的能力；
+2. SFT 不仅仅是在做 style(format) alignment，更多地是在 unleash 模型利用现存知识的能力，比如在 instruction tuning 中给模型演示了如何解答一个数学题的例子，模型下一次遇到相似的问题时，就可以尝试利用类似的策略尝试去解决；
+3. 基于第 2 点，也就解释了为什么 Ocra 有效果，因为他通过更加详细的步骤，让模型更容易学习到如何解决一个问题，而不是只学习了一个答案；
+4. 利用 LFM (e.g. GPT-3.5/GPT-4) 生成 response 的方式，可以在某些 domain 取得还不错的效果，不过在专业 domain 上会遇到 bottleneck，需要找专家进行 response 的修改；
+5. WizardLM 在 MMLU 上可以获得一些精度提升，不过提升的幅度并不大，因为 MMLU 里面主要还是测试 world knowledge 为主，而在 Ocra 的 BBH 结果中可以看到，相比 Vicuna-13B，reasoning 的提升是巨大的；
+6. 对于 code generation task，在 code corpus 上做 pretrain 实际上只是把代码的能力注入到了模型中，但是写代码实际上还需要分解和理解问题的能力，这个能力单纯通过 pretrain 非常难以获取，也许可以通过高质量的 comments 学到，但是这对于海量的 pretrain data 来说比例太少了，而通过 instruction tuning 可以帮助模型解锁这个能力，这也是为什么 HumanEval 上指标提升如此多的原因；
+
+以上就是通过阅读这几篇论文，以及自己做了一些实验之后对 instruction tuning 的一些思考，希望对大家有所帮助，如果有什么问题，欢迎大家和我讨论。
+
 ## Reference
 
 [^1]: [LLaMA: Open and Efficient Foundation Language Models](https://arxiv.org/abs/2302.13971)
@@ -168,3 +228,5 @@ Usage: Sample response that meets the criteria from the key part. Explain why yo
 [^4]: https://sharegpt.com/
 [^5]: [WizardCoder: Empowering Code Large Language Models with Evol-Instruct](https://arxiv.org/abs/2306.08568)
 [^6]: [Ocra: Progressive Learning from Complex Explanation Traces of GPT-4](https://arxiv.org/pdf/2306.02707.pdf)
+[^7]: [Measure Massive Multitask Language Understanding](https://arxiv.org/pdf/2009.03300.pdf)
+[^8]: [Evaluating Large Language Models Trained on Code](https://arxiv.org/pdf/2107.03374.pdf)
