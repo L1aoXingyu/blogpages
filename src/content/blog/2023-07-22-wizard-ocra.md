@@ -211,7 +211,7 @@ Usage: Sample response that meets the criteria from the key part. Explain why yo
 
 下面是我对 SFT(instruction tuning) 的一些思考(不保证是对的):
 
-1. Pre-Train 阶段为模型注入知识，SFT 阶段很难再为模型注入新的知识，一方面 SFT 的数据规模相比 Pre-Train 太小了，另外一方面 SFT 主要的 learning 过程都是通过 `<insturct, response>` 的方式进行监督，更多地在学习 instruction following 的能力；
+1. Pre-Train 阶段为模型注入知识，SFT 阶段很难再为模型注入新的知识，一方面 SFT 的数据规模相比 Pre-Train 太小了，另外一方面 SFT 主要的 learning 过程都是通过 `<instruct, response>` 的方式进行监督，更多地在学习 instruction following 的能力；
 2. SFT 不仅仅是在做 style(format) alignment，更多地是在 unleash 模型利用现存知识的能力，比如在 instruction tuning 中给模型演示了如何解答一个数学题的例子，模型下一次遇到相似的问题时，就可以尝试利用类似的策略尝试去解决；
 3. 基于第 2 点，也就解释了为什么 Ocra 有效果，因为他通过更加详细的步骤，让模型更容易学习到如何解决一个问题，而不是只学习了一个答案；
 4. 利用 LFM (e.g. GPT-3.5/GPT-4) 生成 response 的方式，可以在某些 domain 取得还不错的效果，不过在专业 domain 上会遇到 bottleneck，需要找专家进行 response 的修改；
