@@ -8,6 +8,7 @@ tags:
   - csapp
   - assembly
 ogImage: /assets/csapp-bomb/bomb_preview.png
+comments: true
 ---
 
 ## Table of contents

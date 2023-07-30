@@ -9,6 +9,7 @@ tags:
   - development
   - deep learning
 ogImage: /assets/vscode-best-practice/cover.png
+comments: true
 ---
 
 > 深度学习往往需要强大的算力和硬件作为支撑，这使得深度学习下的模型和算法大多需要在服务器和集群上运行，区别于传统的程序开发可以在本地的机器上运行，这给深度学习的开发带来了新的挑战。

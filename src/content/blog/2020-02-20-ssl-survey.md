@@ -6,6 +6,7 @@ tags:
   - summary
   - self-supervised learning
 ogImage: /assets/images/ssl-survey/ssl_yann.jpg
+comments: true
 ---
 
 ## 引子

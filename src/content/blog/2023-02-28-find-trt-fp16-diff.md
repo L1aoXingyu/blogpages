@@ -8,6 +8,7 @@ tags:
   - tensorRT
   - inference
   - onnx
+comments: true
 ---
 
 ## 0x0 问题的开始

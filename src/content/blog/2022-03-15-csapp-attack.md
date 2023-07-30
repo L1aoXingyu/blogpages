@@ -10,6 +10,7 @@ tags:
   - attack,
   - disassembly
 ogImage: /assets/csapp-attack/attack_preview.png
+comments: true
 ---
 
 ## Table of contents

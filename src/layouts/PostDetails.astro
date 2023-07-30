@@ -14,7 +14,7 @@ export interface Props {
 
 const { post } = Astro.props;
 
-const { title, author, description, ogImage, pubDatetime, tags } = post.data;
+const { title, author, description, ogImage, pubDatetime, tags, comments } = post.data;
 
 const { Content } = await post.render();
 
@@ -42,12 +42,14 @@ const ogUrl = new URL(ogImage ? ogImage : `${title}.png`, Astro.url.origin)
     <article id="article" role="article" class="prose mx-auto mt-8 max-w-3xl">
       <Content />
     </article>
-      {
-          <>
-            <hr class="mx-auto my-[2em] h-[2px] max-w-screen-md border-none bg-black" />
-            <Comments />
-          </>
-      }
+    {
+      comments && (
+        <>
+          <hr class="mx-auto my-[2em] h-[2px] max-w-screen-md border-none bg-black" />
+          <Comments />
+        </>
+      )
+    }
     <ul class="tags-container">
       {tags.map(tag => <Tag name={slugifyStr(tag)} />)}
     </ul>
