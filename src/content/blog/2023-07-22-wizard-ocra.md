@@ -208,6 +208,10 @@ Usage: Sample response that meets the criteria from the key part. Explain why yo
 
 可以看到，在 code generation 任务上，不管是基于 LLaMa-33B 还是用 StarCoder-15B，都取得了非常大的提升，LLaMa 上提升了 16.1，StarCoder 上提升了 23.7。
 
+除此之外，因为 StarCoder 最近放出了 1B, 3B, 7B 和 15B 的 basemodel，基于这些 basemodel 可以经过 wizardcoder sft 获得下面的结果：
+
+<img src="/assets/wizardlm/wizardcoder-exp.png" width=500>
+
 通过对上面的结果进行分析，可以发现 instruction tuning 不仅仅是让模型在 style(format) 和人类对齐，否则并不会在各项指标上都带了巨大的提升，特别是针对 MMLU 这种选择题的任务，style(format) 对结果的影响微乎其微。
 
 下面是我对 SFT(instruction tuning) 的一些思考(不保证是对的):
