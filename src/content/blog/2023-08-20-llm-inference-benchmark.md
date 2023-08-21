@@ -16,7 +16,7 @@ ogImage: /assets/llm-infer-bench/cb_10_latency_cdf_qps_1.png
 
 > As the development of Large Language Models (LLMs) progresses, the cost of inference becomes increasingly significant. Unlike training, which is typically performed once, inference is executed repeatedly. Consequently, the cost of inference begins to dominate the total cost of utilizing a model.
 >
-> Given the importance of inference cost, how can we effectively benchmark it? > In this post, we will explore various metrics designed specifically for benchmarking the inference process in LLMs.
+> Given the importance of inference cost, how can we effectively benchmark it? In this post, we will explore various metrics designed specifically for benchmarking the inference process in LLMs.
 
 ## Table of contents
 
