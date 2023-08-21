@@ -11,6 +11,7 @@ tags:
   - Accelerate
 comments: true
 featured: true
+ogImage: /assets/llm-infer-bench/cb_10_latency_cdf_qps_1.png
 ---
 
 > As the development of Large Language Models (LLMs) progresses, the cost of inference becomes increasingly significant. Unlike training, which is typically performed once, inference is executed repeatedly. Consequently, the cost of inference begins to dominate the total cost of utilizing a model.
