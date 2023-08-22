@@ -2,12 +2,12 @@ import type { Site, SocialObjects } from "./types";
 
 export const SITE: Site = {
   website: "https://sherlock-dev.netlify.app/",
-  author: "Sherlock Liao",
+  author: "Sherlock",
   desc: "A minimal, responsive and SEO-friendly Astro blog theme.",
   title: "Distill",
   ogImage: "astropaper-og.jpg",
   lightAndDarkMode: true,
-  postPerPage: 3,
+  postPerPage: 5,
 };
 
 export const LOCALE = ["en-EN"]; // set to [] to use the environment default
