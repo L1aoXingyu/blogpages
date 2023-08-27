@@ -1,0 +1,59 @@
+---
+title: Parallel Reduction Optimization with CUDA
+pubDatetime: 2023-08-27
+description: test
+tags:
+  - CUDA
+  - Reduction
+  - Parallel Computing
+  - GPU
+  - Engineering
+comments: true
+draft: true
+---
+
+> Reduction is a classic problem in parallel computing. Given an array, the task is to compute its `sum`, `min`, `max`, or `mean`. This operation serves as a fundamental data-parallel primitive.
+>
+> While the naive approach involves using a for-loop to iterate through each element and compute the result, this method is not the most efficient. So, how can CUDA be employed to optimize this process?
+>
+> In this article, we will walk you through various optimization techniques to enhance your reduction code step by step.
+
+```c
+int cpuReduceSum(int* data, size_t size) {
+  // terminate check
+  if (size == 1) return data[0];
+
+  // renew the stride
+  size_t stride = size / 2;
+
+  // in-place reduction
+  for (int i = 0; i < stride; ++i) { data[i] += data[i + stride]; }
+  return cpuReduceSum(data, stride);
+}
+```
+
+```c
+__global__ void reduceNeighbored(int* g_idata, int* g_odata, size_t n) {
+  unsigned int tid = threadIdx.x;
+
+  int idx = blockIdx.x * blockDim.x + threadIdx.x;
+  if (idx >= n) return;
+
+  int* i_data = g_idata + blockDim.x * blockIdx.x;
+
+  for (int stride = 1; stride < blockDim.x; stride <<= 1) {
+    // 2*stride threads execute
+    if ((tid % (2 * stride) == 0)) { i_data[tid] += i_data[tid + stride]; }
+    // synchronized within block
+    __syncthreads();
+  }
+  if (tid == 0) g_odata[blockIdx.x] = i_data[0];
+}
+```
+
+## Reference
+
+- [Professional CUDA C Programming](https://www.amazon.com/Professional-CUDA-Programming-John-Cheng/dp/1118739329)
+- [cuda webinar2](https://developer.download.nvidia.cn/assets/cuda/files/reduction.pdf)
+- [避免分支分化](https://face2ai.com/CUDA-F-3-4-%E9%81%BF%E5%85%8D%E5%88%86%E6%94%AF%E5%88%86%E5%8C%96/)
+- [循环展开](https://face2ai.com/CUDA-F-3-5-%E5%B1%95%E5%BC%80%E5%BE%AA%E7%8E%AF/)
