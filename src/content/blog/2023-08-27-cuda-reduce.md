@@ -18,6 +18,37 @@ draft: true
 >
 > In this article, we will walk you through various optimization techniques to enhance your reduction code step by step.
 
+## Table of Contents
+
+## Introduction
+
+Suppose you want to calculate the sum of an array containing `N` integers. While a simple for-loop could iterate through each element to compute the sum, this approach becomes inefficient for large arrays.
+
+```c
+int cpuSum(int* data, size_t size) {
+  int sum = 0;
+  for (int i = 0; i < size; ++i) {
+    sum += data[i];
+  }
+  return sum;
+```
+
+To speed up the process, parallel computation is essential. Fortunately, addition is both associative and commutative, allowing us to sum the array elements in any order. Moreover, addition is a low-arithmetic-intensity operation, so optimizing for peak bandwidth is crucial.
+
+One might think that synchronizing across all thread blocks would make it easy to reduce very large arrays.
+In this scenario, a global sync could occur after each block produces its partial result. Once all blocks reach this sync point, the process could continue **recursively**, thereby significantly reducing the scale of the arrays involved.
+
+However, global synchronization is not feasible in CUDA. Implementing such a feature in hardware would be costly, especially for GPUs with a high processor count. Additionally, requiring block synchronization would compel programmers to run fewer blocks to avoid deadlock, potentially reducing overall efficiency.
+
+For **deadlock**, imagine a situation where some blocks start executing and reach the sync point, waiting for the other blocks to catch up. While others cannot start executing because GPU's resources are full occupied by the blocks are waiting for sync.
+
+A common workaround to avoid the need for global synchronization is to use kernel decomposition. Kernel launches can effectively serve as global synchronization points, offering the advantage of negligible hardware overhead and low software overhead.
+
+In this approach, the code for all levels remains consistent, and the kernel is invoked recursively. The input arrays are divided into smaller chunks, with each block responsible for calculating the partial sum of its respective chunk.
+An example of kernel decomposition is shown below.
+
+<img src="/public/assets/cuda-reduce/kernel_decompose.png" width=600>
+
 ```c
 int cpuReduceSum(int* data, size_t size) {
   // terminate check
