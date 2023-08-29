@@ -7,6 +7,7 @@ tags:
   - c
   - csapp
   - assembly
+  - cmu15-213
 ogImage: /assets/csapp-bomb/bomb_preview.png
 comments: true
 ---

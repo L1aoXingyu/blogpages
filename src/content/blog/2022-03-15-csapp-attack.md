@@ -9,6 +9,7 @@ tags:
   - assembly,
   - attack,
   - disassembly
+  - cmu15-213
 ogImage: /assets/csapp-attack/attack_preview.png
 comments: true
 ---
