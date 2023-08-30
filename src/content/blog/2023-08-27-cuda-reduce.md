@@ -49,6 +49,16 @@ An example of kernel decomposition is shown below.
 
 <img src="/public/assets/cuda-reduce/kernel_decompose.png" width=600>
 
+Next, let's walk you step by step through the optimization process.
+
+## CPU Baseline
+
+First, let's take a look at the CPU baseline version which is illustrated in the following figure.
+
+<img src="./cpu_recursive.png" width=500>
+
+The following code is a recursive implementation of the interleaved pair approach.
+
 ```c
 int cpuReduceSum(int* data, size_t size) {
   // terminate check
@@ -62,6 +72,15 @@ int cpuReduceSum(int* data, size_t size) {
   return cpuReduceSum(data, stride);
 }
 ```
+
+We can profile the baseline performance for 16M element reduction. We can get the following result.
+
+```bash
+./reducesum starting reduction at device 0: NVIDIA GeForce RTX 3090     with array size 16777216    grid 32768 block 512
+cpu reduce elapsed 54.432869 ms, bandwidth 1.232874 GB/s, cpu_sum: 2139353471
+```
+
+## Reduction#1
 
 ```c
 __global__ void reduceNeighbored(int* g_idata, int* g_odata, size_t n) {
