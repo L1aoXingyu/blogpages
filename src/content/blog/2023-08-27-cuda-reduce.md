@@ -51,13 +51,13 @@ An example of kernel decomposition is shown below.
 
 Next, let's walk you step by step through the optimization process.
 
-## CPU Baseline
+## Baseline
 
-First, let's take a look at the CPU baseline version which is illustrated in the following figure.
+First, let's examine the baseline version which is implemented with CPU, as depicted in the figure below.
 
 <img src="./cpu_recursive.png" width=500>
 
-The following code is a recursive implementation of the interleaved pair approach.
+The code snippet that follows is a recursive implementation using the interleaved pair approach.
 
 ```c
 int cpuReduceSum(int* data, size_t size) {
@@ -73,7 +73,7 @@ int cpuReduceSum(int* data, size_t size) {
 }
 ```
 
-We can profile the baseline performance for 16M element reduction. We can get the following result.
+To profile the baseline performance, we conducted a reduction on an array with 16M(2^24) elements. The results are as follows:
 
 ```bash
 ./reducesum starting reduction at device 0: NVIDIA GeForce RTX 3090     with array size 16777216    grid 32768 block 512
@@ -81,6 +81,13 @@ cpu reduce elapsed 54.432869 ms, bandwidth 1.232874 GB/s, cpu_sum: 2139353471
 ```
 
 ## Reduction#1
+
+Now, let's move on to implementing the first version of the reduction algorithm using CUDA. This technique is known as interleaved addressing, also commonly referred to as **pairing**. The illustration below provides a visual explanation of the concept.
+
+<img src="interleaved_addressing.png" width=600>
+
+In this approach, the array is divided into separate blocks. Threads within each block are then paired to carry out the reduction. Take note of the for-loop in the code snippet below: the stride doubles with each iteration.
+Threads numbered (2 \* stride) will perform the addition operation at each step. Ultimately, the sum will be stored in the first element of the array.
 
 ```c
 __global__ void reduceNeighbored(int* g_idata, int* g_odata, size_t n) {
@@ -100,6 +107,28 @@ __global__ void reduceNeighbored(int* g_idata, int* g_odata, size_t n) {
   if (tid == 0) g_odata[blockIdx.x] = i_data[0];
 }
 ```
+
+The reduction#1 results are as follows:
+
+```bash
+cpu reduce elapsed 54.432869 ms, bandwidth 1.232874 GB/s, cpu_sum: 2139353471
+reduction#1 elapsed 0.677109 ms, bandwidth 99.110909 GB/s, gpu_sum: 2139353471
+```
+
+See what we did there? We achieved a 80x speedup with the first version CUDA implementation!
+But we can do better.
+
+## Reduction#2
+
+What's the problem of reduction#1?
+
+The answer is **divergence**. In the for-loop, only half of the threads are active at each iteration. The other half is idle. This phenomenon is known as **warp divergence**.
+
+For example, in the first iteration, only 16 threads ara active in a warp which contains 32 threads. In the second iteration, only 8 threads are active. There are some many threads are idle in a warp.
+
+We can just modify the index of the for-loop to avoid divergence. As shown in the figure below, we use coalesced addressing to avoid divergence.
+
+<img src="no_divergence.png" width=700>
 
 ## Reference
 
