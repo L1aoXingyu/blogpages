@@ -11,7 +11,7 @@ tags:
   - GPU
   - compiler
   - parallel programming
-ogImage: /assets/triton_tutorial/triton_logo.png
+ogImage: /assets/triton_tutorial/softmax-performance.png
 comments: true
 ---
 
