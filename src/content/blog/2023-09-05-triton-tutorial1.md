@@ -56,13 +56,13 @@ In this naive version, computing `y=naive_softmax(x)` for $x \in R^{M\times N}$ 
 Here is an illustration from [Horace He's blog](https://horace.io/brrr_intro.html) showing this case.
 
 <div align=center>
-<img src="/public/assets/triton_tutorial/seq_pointwise.png" width=400>
+<img src="/assets/triton_tutorial/seq_pointwise.png" width=400>
 </div>
 
 We'd prefer a custom "fused" kernel that only reads X once, does all computations on-chip, then writes back once. This would only require reading `MN` elements and writing MN elements, so we could expect a theoretical speedup of ~4x (i.e. `(8MN + 4M)/2MN`). The following figure illustrates this ideal case:
 
 <div align=center>
-<img src="/public/assets/triton_tutorial/fuse_pointwise.png" width=400>
+<img src="/assets/triton_tutorial/fuse_pointwise.png" width=400>
 </div>
 
 In theory, the `torch.jit.script` flag aims to perform this "kernel fusion" automatically, but as we'll see when profiling later, it is still far from ideal.
@@ -241,7 +241,7 @@ softmax-performance:
 ```
 
 <div align=center>
-<img src="/public/assets/triton_tutorial/softmax-performance.png" width=500>
+<img src="/assets/triton_tutorial/softmax-performance.png" width=500>
 </div>
 
 In the plot above, we observe that the Triton kernel is approximately 4x faster than `torch.jit`. Feel free to modify some arguments to observe any differences.
