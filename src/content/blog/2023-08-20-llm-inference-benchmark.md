@@ -91,6 +91,8 @@ After testing various inference frameworks, we can obtain example results as ill
 
 This figure allows us to examine the latency across all percentiles, providing a comprehensive view of the system's responsiveness.
 
+You can check out the LightLLM, TGI and vLLM benchmarks in this [repo](https://github.com/L1aoXingyu/llm-infer-bench)
+
 ## Conclusion
 
 In this post, we explored a range of metrics specifically tailored for benchmarking the inference process in Large Language Models (LLMs). We delved into methods for simulating different real-world scenarios and evaluating the performance of various inference frameworks.
