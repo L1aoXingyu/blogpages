@@ -10,7 +10,6 @@ tags:
   - Transformer
   - Accelerate
 comments: true
-featured: true
 ogImage: "/assets/llm-infer-bench/cb_10_latency_cdf_qps_1.png"
 ---
 

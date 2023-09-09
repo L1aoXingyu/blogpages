@@ -2,7 +2,6 @@
 title: VSCode 配置最舒适的深度学习开发环境
 pubDatetime: 2022-02-19
 description: 记录配置和使用 VSCode 的流程，演示一些深度学习中 debug 的例子
-featured: true
 tags:
   - vscode,
   - tool
